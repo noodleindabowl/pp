@@ -226,7 +226,7 @@ async def dice(text, channel):
         await channel.send(f"silly you cant roll {mock} dice -_-\"")
         return
     elif sides <= 0:
-        mock = "zero" if num == 0 else "negative"
+        mock = "zero" if sides == 0 else "negative"
         await channel.send(f"silly you cant roll a {mock} sided dice -_-\" (somehow you can roll one and two sided dice though...)")
         return
     # roll dice
