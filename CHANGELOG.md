@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Craiyon query command
+- Dice command
+- Help command
 
 ## [0.1.0] - 2022-10-13
 ### Added

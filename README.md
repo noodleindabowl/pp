@@ -10,6 +10,7 @@ I always wanted to make a discord bot for the heck of it so here we go lol. and 
 ### Dependencies:
 
 Python: at least version 3.10 because i use the new match statement. all the needed modules are listed in the "requirements" file
+Geckodriver and firefox: for the "dalle" command
 
 ### Credits:
 
