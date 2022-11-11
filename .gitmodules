@@ -1,0 +1,3 @@
+[submodule "craiyon_request"]
+	path = craiyon_request
+	url = https://github.com/noodleindabowl/craiyon_request
