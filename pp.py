@@ -49,7 +49,7 @@ UNICODE_HEART = unicodedata.lookup("Heavy Black Heart")
 UNICODE_PEANUTS = unicodedata.lookup("Peanuts")
 # other
 long_commands = {
-    "dalle": {"in_use": False, "user": None},
+    "dalle": {"user": None},
 }
 # bot messages
 BOT_GREETING = "haiiiii ^_^ hi!! hiiiiii <3 haiiiiii hii :3"
@@ -190,26 +190,31 @@ async def ask(text, channel):
 
 async def dalle(text, channel, user):
     """fetch AI art from www.craiyon.com and post it to requester"""
-    if long_commands["dalle"]["in_use"]:
+    if long_commands["dalle"]["user"]:
         await channel.send(WARN_DALLE_IN_USE)
         return
     if text == "":
         await channel.send(f"{USAGE} {BOT_PREFIX} dalle {YOUR_QUERY}")
         return
     # remember current user
-    long_commands["dalle"]["in_use"] = True
     long_commands["dalle"]["user"] = user
     # generate image
     await channel.send(f"hewwo {user.mention}! AI art of \"{text}\" is being generated just for you!")
-    result = await craiyon_request.generate_image(MYSESSION, text)
-    # convert pillow image to discord file and send
-    with io.BytesIO() as image_bytes:
-        result.save(image_bytes, "JPEG")
-        image_bytes.seek(0)
-        result_file = discord.File(fp=image_bytes, filename="image.jpeg")
-        await channel.send(
-            f"{user.mention}'s \"{text}\" AI-generated art is ready!",
-            file=result_file)
+    try:
+        result = await craiyon_request.generate_image(MYSESSION, text)
+        # convert pillow image to discord file and send
+        with io.BytesIO() as image_bytes:
+            result.save(image_bytes, "JPEG")
+            image_bytes.seek(0)
+            result_file = discord.File(fp=image_bytes, filename="image.jpeg")
+            await channel.send(
+                f"{user.mention}'s \"{text}\" AI-generated art is ready!",
+                file=result_file)
+    except Exception as exc:
+        raise exc
+    finally:
+        #forget user
+        long_commands["dalle"]["user"] = None
 
 async def dice(text, channel):
     num, _, sides = text.rpartition("x")
