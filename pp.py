@@ -12,6 +12,7 @@ import logging
 import random
 import unicodedata
 import io
+import re
 
 import discord
 from arsenic import services, browsers, get_session
@@ -44,6 +45,7 @@ client = discord.Client(intents=intents, activity=activity)
 BOT_NAME = "peepeepoopoo"
 BOT_SHORTNAME = "pp"
 BOT_PREFIX = "!pp"
+BOT_NAME_REGEX = r"(?:^|\W){}(?:$|\W)"
 # emojis
 UNICODE_HEART = unicodedata.lookup("Heavy Black Heart")
 UNICODE_PEANUTS = unicodedata.lookup("Peanuts")
@@ -118,7 +120,9 @@ async def on_message(message):
             await message.channel.send(
                 f"{message.author.mention}! {GENERIC_ERROR_MESSAGE}")
             raise exc
-    elif BOT_NAME in content or BOT_SHORTNAME in content:
+    elif (re.search(BOT_NAME_REGEX.format(BOT_NAME), content) or
+      re.search(BOT_NAME_REGEX.format(BOT_SHORTNAME), content)
+    ):
         # say hello
         await message.channel.send(BOT_GREETING)
 
@@ -235,7 +239,7 @@ async def dice(text, channel):
         await channel.send(f"silly you cant roll a {mock} sided dice -_-\" (somehow you can roll one and two sided dice though...)")
         return
     # roll dice
-    result = sum([random.randint(1, sides) for _ in range(num)])
+    result = sum((random.randint(1, sides) for _ in range(num)))
     await channel.send(f"rolled a {result} :game_die:")
 
 if __name__ == "__main__":
