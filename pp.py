@@ -53,10 +53,10 @@ long_commands = {
 }
 # bot messages
 BOT_GREETING = "haiiiii ^_^ hi!! hiiiiii <3 haiiiiii hii :3"
-USAGE = ":heart:*USAGE*:heart: :"
-WARN = ":scream_cat:*WARNING*:scream_cat: :"
+USAGE = ":cat: *USAGE* :cat: :"
+WARN = ":scream_cat: *WARNING* :scream_cat: :"
 YOUR_QUERY = "*your_query*"
-WARN_DALLE_IN_USE = WARN + (" dalle command cannot run multiple times! please"
+WARN_DALLE_IN_USE = WARN + (" dalle command cannot run multiple times! please "
 "wait for last request to finish! OwO")
 GENERIC_ERROR_MESSAGE = ("OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A "
                          "wittle fucko boingo! The code monkeys at our "
@@ -114,10 +114,10 @@ async def on_message(message):
         # run command
         try:
             await execute_command(message)
-        except Exception as e:
+        except Exception as exc:
             await message.channel.send(
                 f"{message.author.mention}! {GENERIC_ERROR_MESSAGE}")
-            raise e
+            raise exc
     elif BOT_NAME in content or BOT_SHORTNAME in content:
         # say hello
         await message.channel.send(BOT_GREETING)
@@ -226,11 +226,11 @@ async def dice(text, channel):
     if num <= 0 and sides <= 0:
         await channel.send("you ever rolled a die before? -.-")
         return
-    elif num <= 0:
+    if num <= 0:
         mock = "zero" if num == 0 else "a negative number of"
         await channel.send(f"silly you cant roll {mock} dice -_-\"")
         return
-    elif sides <= 0:
+    if sides <= 0:
         mock = "zero" if sides == 0 else "negative"
         await channel.send(f"silly you cant roll a {mock} sided dice -_-\" (somehow you can roll one and two sided dice though...)")
         return
